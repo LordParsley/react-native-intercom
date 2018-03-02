@@ -22,6 +22,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import io.intercom.android.sdk.experimental.Intercom;
+import io.intercom.android.sdk.Intercom.Visibility;
 import io.intercom.android.sdk.UserAttributes;
 import io.intercom.android.sdk.experimental.IntercomSettings;
 import io.intercom.android.sdk.identity.Registration;
@@ -203,17 +204,17 @@ public class IntercomModule extends ReactContextBaseJavaModule {
         callback.invoke(null, null);
     }
 
-    private Intercom.Visibility visibilityStringToVisibility(String visibility) {
+    private Visibility visibilityStringToVisibility(String visibility) {
       if (visibility.equalsIgnoreCase("VISIBLE")) {
-        return Intercom.Visibility.VISIBLE;
+        return Visibility.VISIBLE;
       } else {
-        return Intercom.Visibility.GONE;
+        return Visibility.GONE;
       }
     }
 
     @ReactMethod
     public void setLauncherVisibility(String visibility, Callback callback) {
-        Intercom.Visibility intercomVisibility = visibilityStringToVisibility(visibility);
+        Visibility intercomVisibility = visibilityStringToVisibility(visibility);
 
         try {
             Intercom.client().setLauncherVisibility(intercomVisibility);
@@ -226,7 +227,7 @@ public class IntercomModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setInAppMessageVisibility(String visibility, Callback callback) {
-        Intercom.Visibility intercomVisibility = visibilityStringToVisibility(visibility);
+        Visibility intercomVisibility = visibilityStringToVisibility(visibility);
 
         try {
             Intercom.client().setInAppMessageVisibility(intercomVisibility);
