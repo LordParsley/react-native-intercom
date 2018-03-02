@@ -17,7 +17,7 @@ import android.util.Log;
 import java.util.Map;
 import java.util.HashMap;
 
-import io.intercom.android.sdk.Intercom;
+import io.intercom.android.sdk.experimental.Intercom;
 import io.intercom.android.sdk.UnreadConversationCountListener;
 
 public class IntercomEventEmitter extends ReactContextBaseJavaModule {

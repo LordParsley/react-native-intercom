@@ -1,5 +1,7 @@
 package com.robinpowered.react.Intercom;
 
+import android.app.Application;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.facebook.react.bridge.Callback;
@@ -19,8 +21,9 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import io.intercom.android.sdk.Intercom;
+import io.intercom.android.sdk.experimental.Intercom;
 import io.intercom.android.sdk.UserAttributes;
+import io.intercom.android.sdk.experimental.IntercomSettings;
 import io.intercom.android.sdk.identity.Registration;
 import io.intercom.android.sdk.push.IntercomPushClient;
 
@@ -41,22 +44,59 @@ public class IntercomModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void registerIdentifiedUser(ReadableMap options, Callback callback) {
-        if (options.hasKey("email") && options.getString("email").length() > 0) {
-            Intercom.client().registerIdentifiedUser(
-                    new Registration().withEmail(options.getString("email"))
-            );
-            Log.i(TAG, "registerIdentifiedUser with userEmail");
-            callback.invoke(null, null);
-        } else if (options.hasKey("userId") && options.getString("userId").length() > 0) {
-            Intercom.client().registerIdentifiedUser(
-                    new Registration().withUserId(options.getString("userId"))
-            );
-            Log.i(TAG, "registerIdentifiedUser with userId");
-            callback.invoke(null, null);
+    public void boot(ReadableMap options, Callback callback) {
+        String apiKey = options.hasKey("apiKey") ? options.getString("apiKey") : null;
+        String appId = options.hasKey("appId") ? options.getString("appId") : null;
+        String userId = options.hasKey("userId") ? options.getString("userId") : null;
+        String email = options.hasKey("email") ? options.getString("email") : null;
+        String userHash = options.hasKey("userHash") ? options.getString("userHash") : null;
+
+        IntercomSettings settings = IntercomSettings.create();
+
+        if (!TextUtils.isEmpty(apiKey) && !TextUtils.isEmpty(appId)) {
+            settings = settings
+                    .withApiKey(apiKey)
+                    .withAppId(appId);
         } else {
-            Log.e(TAG, "registerIdentifiedUser called with invalid userId or email");
-            callback.invoke("Invalid userId or email");
+            callback.invoke("Invalid apiKey or appId");
+            return;
+        }
+
+        Application application = getCurrentActivity() != null ? getCurrentActivity().getApplication() : null;
+        if (application == null) {
+            callback.invoke("Current activity is null.");
+            return;
+        }
+
+        if (TextUtils.isEmpty(userId) && TextUtils.isEmpty(email)) {
+            // Boot with an unidentified user.
+            Intercom.boot(application, settings);
+            Log.i(TAG, "Boot with unidentified user.");
+            callback.invoke(null, null);
+            return;
+        }
+
+        if (!TextUtils.isEmpty(userId))
+            settings = settings.withUserId(userId);
+
+        if (!TextUtils.isEmpty(email))
+            settings = settings.withUserId(email);
+
+        if (!TextUtils.isEmpty(userHash))
+            settings = settings.withUserHash(userHash);
+
+        // Boot with an identified user.
+        Intercom.boot(application, settings);
+        Log.i(TAG, "Boot with identified user.");
+        callback.invoke(null, null);
+    }
+
+    @ReactMethod
+    public void shutdown(@Nullable Callback callback) {
+        Intercom.client().shutdown();
+        Log.i(TAG, "shutdown");
+        if (callback != null) {
+            callback.invoke(null, null);
         }
     }
 
@@ -68,22 +108,6 @@ public class IntercomModule extends ReactContextBaseJavaModule {
             callback.invoke(null, null);
         } else {
             Log.e(TAG, "sendTokenToIntercom; getCurrentActivity() is null");
-        }
-    }
-
-    @ReactMethod
-    public void registerUnidentifiedUser(Callback callback) {
-        Intercom.client().registerUnidentifiedUser();
-        Log.i(TAG, "registerUnidentifiedUser");
-        callback.invoke(null, null);
-    }
-
-    @ReactMethod
-    public void reset(@Nullable Callback callback) {
-        Intercom.client().reset();
-        Log.i(TAG, "reset");
-        if (callback != null) {
-            callback.invoke(null, null);
         }
     }
 
@@ -228,18 +252,18 @@ public class IntercomModule extends ReactContextBaseJavaModule {
             Object value = entry.getValue();
             if (key.equals("email")) {
                 builder.withEmail((String)value);
-            } else if (key.equals("user_id")) {
+            } else if (key.equals("userId")) {
                 builder.withUserId((String)value);
             } else if (key.equals("name")) {
                 builder.withName((String)value);
             } else if (key.equals("phone")) {
                 builder.withPhone((String)value);
-            } else if (key.equals("language_override")) {
+            } else if (key.equals("languageOverride")) {
                 builder.withLanguageOverride((String)value);
-            } else if (key.equals("signed_up_at")) {
+            } else if (key.equals("signedUpAt")) {
                 Date dateSignedUpAt = new Date(((Number)value).longValue());
                 builder.withSignedUpAt(dateSignedUpAt);
-            } else if (key.equals("unsubscribed_from_emails")) {
+            } else if (key.equals("unsubscribedFromEmails")) {
                 builder.withUnsubscribedFromEmails((Boolean)value);
             } else if (key.equals("custom_attributes")) {
                 // value should be a Map here
