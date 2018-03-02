@@ -28,7 +28,8 @@ public class IntercomEventEmitter extends ReactContextBaseJavaModule {
 
     public IntercomEventEmitter(ReactApplicationContext reactContext) {
         super(reactContext);
-        Intercom.client().addUnreadConversationCountListener(unreadConversationCountListener);
+        if (Intercom.isBooted())
+            Intercom.client().addUnreadConversationCountListener(unreadConversationCountListener);
     }
 
     @Override
@@ -44,9 +45,11 @@ public class IntercomEventEmitter extends ReactContextBaseJavaModule {
     }
 
     private void handleUpdateUnreadCount() {
-        WritableMap params = Arguments.createMap();
-        params.putInt("count", Intercom.client().getUnreadConversationCount());
-        sendEvent(UNREAD_CHANGE_NOTIFICATION, params);
+        if (Intercom.isBooted()) {
+            WritableMap params = Arguments.createMap();
+            params.putInt("count", Intercom.client().getUnreadConversationCount());
+            sendEvent(UNREAD_CHANGE_NOTIFICATION, params);
+        }
     }
 
     private void sendEvent(String eventName, @Nullable WritableMap params) {
