@@ -94,6 +94,13 @@ public class IntercomModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void shutdown(@Nullable Callback callback) {
+        if (Intercom.isBooted()) {
+            Log.w(TAG, "Intercom client is not booted.");
+            if (callback != null)
+                callback.invoke("Intercom client is not booted.");
+            return;
+        }
+        
         Intercom.client().shutdown();
         Log.i(TAG, "shutdown");
         if (callback != null) {
@@ -145,52 +152,99 @@ public class IntercomModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void handlePushMessage(Callback callback) {
+        if (Intercom.isBooted()) {
+            Log.w(TAG, "Intercom client is not booted.");
+            if (callback != null)
+                callback.invoke("Intercom client is not booted.");
+            return;
+        }
+        
         Intercom.client().handlePushMessage();
         callback.invoke(null, null);
     }
 
     @ReactMethod
     public void displayMessenger(Callback callback) {
+        if (Intercom.isBooted()) {
+            Log.w(TAG, "Intercom client is not booted.");
+            if (callback != null)
+                callback.invoke("Intercom client is not booted.");
+            return;
+        }
+        
         Intercom.client().displayMessenger();
         callback.invoke(null, null);
     }
 
     @ReactMethod
     public void hideMessenger(Callback callback) {
+        if (Intercom.isBooted()) {
+            Log.w(TAG, "Intercom client is not booted.");
+            if (callback != null)
+                callback.invoke("Intercom client is not booted.");
+            return;
+        }
+        
         Intercom.client().hideMessenger();
         callback.invoke(null, null);
     }
 
     @ReactMethod
     public void displayMessageComposer(Callback callback) {
+        if (Intercom.isBooted()) {
+            Log.w(TAG, "Intercom client is not booted.");
+            if (callback != null)
+                callback.invoke("Intercom client is not booted.");
+            return;
+        }
+        
         Intercom.client().displayMessageComposer();
         callback.invoke(null, null);
     }
 
     @ReactMethod
     public void displayMessageComposerWithInitialMessage(String message, Callback callback) {
+        if (Intercom.isBooted()) {
+            Log.w(TAG, "Intercom client is not booted.");
+            if (callback != null)
+                callback.invoke("Intercom client is not booted.");
+            return;
+        }
+        
         Intercom.client().displayMessageComposer(message);
         callback.invoke(null, null);
     }
 
     @ReactMethod
     public void setUserHash(String userHash, Callback callback) {
+        if (Intercom.isBooted()) {
+            Log.w(TAG, "Intercom client is not booted.");
+            if (callback != null)
+                callback.invoke("Intercom client is not booted.");
+            return;
+        }
+        
         Intercom.client().setUserHash(userHash);
         callback.invoke(null, null);
     }
 
     @ReactMethod
     public void displayConversationsList(Callback callback) {
+        if (Intercom.isBooted()) {
+            Log.w(TAG, "Intercom client is not booted.");
+            if (callback != null)
+                callback.invoke("Intercom client is not booted.");
+            return;
+        }
+        
         Intercom.client().displayConversationsList();
         callback.invoke(null, null);
     }
 
     @ReactMethod
     public void getUnreadConversationCount(Callback callback) {
-
         try {
             int conversationCount = Intercom.client().getUnreadConversationCount();
-
             callback.invoke(null, conversationCount);
         } catch (Exception ex) {
             Log.e(TAG, "logEvent - unable to get conversation count");
@@ -200,6 +254,13 @@ public class IntercomModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void displayHelpCenter(Callback callback) {
+        if (Intercom.isBooted()) {
+            Log.w(TAG, "Intercom client is not booted.");
+            if (callback != null)
+                callback.invoke("Intercom client is not booted.");
+            return;
+        }
+        
         Intercom.client().displayHelpCenter();
         callback.invoke(null, null);
     }
@@ -218,7 +279,6 @@ public class IntercomModule extends ReactContextBaseJavaModule {
 
         try {
             Intercom.client().setLauncherVisibility(intercomVisibility);
-
             callback.invoke(null, null);
         } catch (Exception ex) {
             callback.invoke(ex.toString());
@@ -231,7 +291,6 @@ public class IntercomModule extends ReactContextBaseJavaModule {
 
         try {
             Intercom.client().setInAppMessageVisibility(intercomVisibility);
-
             callback.invoke(null, null);
         } catch (Exception ex) {
             callback.invoke(ex.toString());
@@ -240,9 +299,16 @@ public class IntercomModule extends ReactContextBaseJavaModule {
     
     @ReactMethod
     public void setBottomPadding( Integer padding, Callback callback) {
-         Intercom.client().setBottomPadding(padding);
-         Log.i(TAG, "setBottomPadding");
-         callback.invoke(null, null);
+        if (Intercom.isBooted()) {
+            Log.w(TAG, "Intercom client is not booted.");
+            if (callback != null)
+                callback.invoke("Intercom client is not booted.");
+            return;
+        }
+        
+        Intercom.client().setBottomPadding(padding);
+        Log.i(TAG, "setBottomPadding");
+        callback.invoke(null, null);
     }
 
     private UserAttributes convertToUserAttributes(ReadableMap readableMap) {
