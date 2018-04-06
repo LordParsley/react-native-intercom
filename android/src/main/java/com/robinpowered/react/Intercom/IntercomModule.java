@@ -94,7 +94,7 @@ public class IntercomModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void shutdown(@Nullable Callback callback) {
-        if (Intercom.isBooted()) {
+        if (!Intercom.isBooted()) {
             Log.w(TAG, "Intercom client is not booted.");
             if (callback != null)
                 callback.invoke("Intercom client is not booted.");
@@ -152,7 +152,7 @@ public class IntercomModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void handlePushMessage(Callback callback) {
-        if (Intercom.isBooted()) {
+        if (!Intercom.isBooted()) {
             Log.w(TAG, "Intercom client is not booted.");
             if (callback != null)
                 callback.invoke("Intercom client is not booted.");
@@ -165,7 +165,7 @@ public class IntercomModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void displayMessenger(Callback callback) {
-        if (Intercom.isBooted()) {
+        if (!Intercom.isBooted()) {
             Log.w(TAG, "Intercom client is not booted.");
             if (callback != null)
                 callback.invoke("Intercom client is not booted.");
@@ -178,7 +178,7 @@ public class IntercomModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void hideMessenger(Callback callback) {
-        if (Intercom.isBooted()) {
+        if (!Intercom.isBooted()) {
             Log.w(TAG, "Intercom client is not booted.");
             if (callback != null)
                 callback.invoke("Intercom client is not booted.");
@@ -191,7 +191,7 @@ public class IntercomModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void displayMessageComposer(Callback callback) {
-        if (Intercom.isBooted()) {
+        if (!Intercom.isBooted()) {
             Log.w(TAG, "Intercom client is not booted.");
             if (callback != null)
                 callback.invoke("Intercom client is not booted.");
@@ -204,7 +204,7 @@ public class IntercomModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void displayMessageComposerWithInitialMessage(String message, Callback callback) {
-        if (Intercom.isBooted()) {
+        if (!Intercom.isBooted()) {
             Log.w(TAG, "Intercom client is not booted.");
             if (callback != null)
                 callback.invoke("Intercom client is not booted.");
@@ -217,7 +217,7 @@ public class IntercomModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setUserHash(String userHash, Callback callback) {
-        if (Intercom.isBooted()) {
+        if (!Intercom.isBooted()) {
             Log.w(TAG, "Intercom client is not booted.");
             if (callback != null)
                 callback.invoke("Intercom client is not booted.");
@@ -230,7 +230,7 @@ public class IntercomModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void displayConversationsList(Callback callback) {
-        if (Intercom.isBooted()) {
+        if (!Intercom.isBooted()) {
             Log.w(TAG, "Intercom client is not booted.");
             if (callback != null)
                 callback.invoke("Intercom client is not booted.");
@@ -254,7 +254,7 @@ public class IntercomModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void displayHelpCenter(Callback callback) {
-        if (Intercom.isBooted()) {
+        if (!Intercom.isBooted()) {
             Log.w(TAG, "Intercom client is not booted.");
             if (callback != null)
                 callback.invoke("Intercom client is not booted.");
@@ -299,7 +299,7 @@ public class IntercomModule extends ReactContextBaseJavaModule {
     
     @ReactMethod
     public void setBottomPadding( Integer padding, Callback callback) {
-        if (Intercom.isBooted()) {
+        if (!Intercom.isBooted()) {
             Log.w(TAG, "Intercom client is not booted.");
             if (callback != null)
                 callback.invoke("Intercom client is not booted.");
